@@ -4,26 +4,35 @@ defineProps({
     type: String,
     required: true,
   },
+  eyebrow: {
+    type: String,
+    default: "",
+  },
+  anchor: {
+    type: String,
+    default: "",
+  },
 });
 </script>
 
 <template>
-  <div
-    :id="title.toLowerCase().replace(' ', '-')"
-    class="max-w-7xl px-6 mx-auto py-32"
+  <section
+    :id="anchor || title.toLowerCase().replace(/\s+/g, '-')"
+    class="max-w-6xl px-6 mx-auto py-24 sm:py-28"
   >
-    <div class="border-2-- p-8-- border-zinc-500">
-      <h1
-        class="text-3xl sm:text-5xl lg:text-7xl mb-16 flex items-center font-semibold"
+    <div class="mb-12 sm:mb-16">
+      <span v-if="eyebrow" class="eyebrow mb-4">{{ eyebrow }}</span>
+      <h2
+        class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-steam"
       >
         {{ title }}
-      </h1>
+      </h2>
     </div>
 
     <div>
       <slot></slot>
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped></style>

@@ -3,143 +3,160 @@ import { ref } from "vue";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/vue/24/outline/index.js";
 import Container from "./Container.vue";
 
-const posts = ref([
+const projects = ref([
   {
     id: 1,
+    title: "Hired By Code",
+    href: "https://hiredbycode.com",
+    status: "live",
+    description:
+      "AI-powered CV builder that mines GitHub activity — repos, PRs, commit patterns — to generate ATS-optimised CVs and track job applications.",
+    stack: ["Laravel 12", "Vue 3", "Inertia", "TypeScript", "Stripe", "Redis"],
+  },
+  {
+    id: 2,
     title: "Kuponify",
-    href: "#",
+    href: "https://kuponify.com",
+    status: "live",
     description:
-      "Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.",
-    // imageUrl: "https://kuponify.com/logo-light-sq.png",
-    imageUrl: "/k_p_1.png",
-    date: "Mar 16, 2020",
-    datetime: "2020-03-16",
-    author: {
-      name: "Michael Foster",
-      imageUrl: "https://kuponify.com/logo-dark-sq.png",
-    },
+      "API-first coupon management for e-commerce: multi-tenant stores, revenue analytics, tiered billing, and an OAuth2-secured API.",
+    stack: ["Laravel 12", "Vue 3", "Chart.js", "Passport", "Stripe"],
   },
   {
-    id: 1,
-    title: "Whereby-laravel",
-    href: "#",
+    id: 3,
+    title: "Eavesdroppr",
+    href: "https://eavesdroppr.com",
+    status: "live",
     description:
-      "Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.",
-    imageUrl:
-      "https://opengraph.githubassets.com/fad106653f751a87578db113463a275aee8113d44ea0b9c79b54dc830d00761b/a4anthony/whereby-laravel",
-    date: "Mar 16, 2020",
-    datetime: "2020-03-16",
-    author: {
-      name: "Michael Foster",
-      imageUrl:
-        "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    },
+      "Content publishing platform for an African-diaspora lifestyle audience — full-text search, queued media pipeline, structured-data SEO.",
+    stack: ["Laravel 12", "Inertia", "Vue 3", "Filament", "Meilisearch"],
   },
   {
-    id: 1,
-    title: "FluentNow",
-    href: "#",
+    id: 10,
+    title: "Proctoring Platform",
+    href: "",
+    status: "dev",
     description:
-      "Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.",
-    imageUrl: "/fn_p.png",
-    date: "Mar 16, 2020",
-    datetime: "2020-03-16",
-    author: {
-      name: "Michael Foster",
-      imageUrl:
-        "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    },
+      "Multi-tenant proctoring SaaS in a TypeScript monorepo — browser SDK with webcam recording and behavioural observers, Python face analysis, queued post-hoc runs.",
+    stack: ["TypeScript", "NestJS", "Next.js", "Prisma", "PostgreSQL", "Docker"],
   },
   {
-    id: 1,
+    id: 4,
     title: "TheEnglishQuiz",
-    href: "#",
+    href: "https://theenglishquiz.com",
+    status: "live",
     description:
-      "Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.",
-    imageUrl: "/teq_p.png",
-    date: "Mar 16, 2020",
-    datetime: "2020-03-16",
-    author: {
-      name: "Michael Foster",
-      imageUrl:
-        "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    },
+      "English assessment platform serving 2,200+ companies and 115K+ test takers, with AI proctoring and ATS integrations. Core engineer since 2021.",
+    stack: ["Laravel", "Vue.js", "MySQL", "Cypress"],
   },
   {
-    id: 1,
+    id: 5,
+    title: "FluentNow",
+    href: "https://fluentnow.co",
+    status: "live",
+    description:
+      "Language learning platform with lesson scheduling, progress tracking, and self-hosted video classrooms with SSO hand-off from bookings.",
+    stack: ["Laravel", "Vue 2", "Jitsi Meet", "Redis", "Nginx"],
+  },
+  {
+    id: 6,
+    title: "MelaMart",
+    href: "https://www.melamartonline.com",
+    status: "live",
+    description:
+      "E-commerce platform built greenfield to launch — Stripe payments with webhook-driven order lifecycle and 80% browser-test coverage.",
+    stack: ["Laravel", "Vue.js", "MySQL", "Dusk"],
+  },
+  {
+    id: 7,
+    title: "Whereby-Laravel",
+    href: "https://github.com/a4anthony/whereby-laravel",
+    status: "oss",
+    description:
+      "Laravel wrapper for the Whereby video API — fluent interface, service-provider auto-discovery, PHPUnit suite. Published on Packagist.",
+    stack: ["PHP 8+", "Laravel", "PHPUnit"],
+  },
+  {
+    id: 8,
     title: "Coupon Generator",
-    href: "#",
+    href: "https://github.com/a4anthony/coupon",
+    status: "oss",
     description:
-      "Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.",
-    imageUrl:
-      "https://opengraph.githubassets.com/d6f5b6d3850105efb256d8ba317a55bbbb19947cc5b2615dcb4b2a302215db50/a4anthony/coupon",
-    date: "Mar 16, 2020",
-    datetime: "2020-03-16",
-    author: {
-      name: "Michael Foster",
-      imageUrl:
-        "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    },
+      "Coupon generation and validation for Laravel with a publishable dashboard, configurable rules, expiry handling, and redemption limits.",
+    stack: ["PHP 8+", "Laravel", "Blade", "PHPUnit"],
   },
   {
-    id: 1,
+    id: 9,
     title: "Cartavel",
-    href: "#",
+    href: "https://github.com/a4anthony/cartavel",
+    status: "oss",
     description:
-      "Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.",
-    imageUrl:
-      "https://opengraph.githubassets.com/5b4cd2442f82af67f7d7e09878986d11249b2e9b1234eb7b86118aec9b279e39/a4anthony/cartavel",
-    date: "Mar 16, 2020",
-    datetime: "2020-03-16",
-    author: {
-      name: "Michael Foster",
-      imageUrl:
-        "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    },
+      "Session-backed cart management for Laravel — facade-driven API with item-level metadata and pluggable storage drivers.",
+    stack: ["PHP 8+", "Laravel", "PHPUnit"],
   },
-  // More posts...
 ]);
 </script>
 
 <template>
-  <container title="Projects">
-    <div
-      class="mx-auto grid w-full auto-rows-fr grid-cols-1 gap-12 lg:mx-0 lg:max-w-none lg:grid-cols-3"
-    >
+  <container title="Projects" eyebrow="/// service registry — 10 entries">
+    <div class="grid grid-cols-1 gap-px border border-hairline bg-ground md:grid-cols-2 lg:grid-cols-3">
       <article
-        v-for="post in posts"
-        :key="post.id"
-        class="relative isolate flex flex-col justify-end overflow-hidden rounded-0 bg-gray-900 px-4 pb-4 pt-56 sm:pt-60 lg:pt-56"
+        v-for="project in projects"
+        :key="project.id"
+        class="group relative flex flex-col bg-panel p-6 transition-colors duration-300 hover:bg-panel/60"
       >
-        <img
-          :src="post.imageUrl"
-          alt=""
-          style="object-position: top"
-          class="absolute inset-0 -z-10 h-full-- w-full object-contain--"
-        />
-        <div
-          class="absolute inset-0 -z-10 bg-gradient-to-t from-zinc-900 via-zinc-900/80"
-        />
-        <div
-          class="absolute inset-0 -z-10 rounded-0 ring-1 ring-inset ring-zinc-300/10"
-        />
+        <div class="flex items-center justify-between">
+          <span
+            class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em]"
+            :class="{
+              'text-live': project.status === 'live',
+              'text-amber': project.status === 'oss',
+              'text-faded': project.status === 'dev',
+            }"
+          >
+            <span
+              class="h-1.5 w-1.5 rounded-full"
+              :class="{
+                'dot-live': project.status === 'live',
+                'border border-amber bg-transparent': project.status === 'oss',
+                'bg-faded': project.status === 'dev',
+              }"
+            />
+            {{
+              project.status === "live"
+                ? "live"
+                : project.status === "oss"
+                ? "open source"
+                : "in development"
+            }}
+          </span>
+          <arrow-top-right-on-square-icon
+            v-if="project.href"
+            class="h-4 w-4 text-faded transition-colors group-hover:text-amber"
+          />
+        </div>
 
-        <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-100">
-          <a :href="post.href">
-            <span class="absolute inset-0" />
-            {{ post.title }}
-          </a>
-        </h3>
-        <p class="text-xs line-clamp-3 mt-2 text-gray-300">
-          {{ post.description }}
-        </p>
-        <div class="mt-3 flex justify-end">
+        <h3 class="mt-4 font-display text-xl font-semibold text-steam">
           <a
-            href="#"
-            class="lowercase underline text-sm flex items-center animate text-gray-200 hover:text-gray-300"
-            >View Project
-            <arrow-top-right-on-square-icon class="w-4 h-4 ml-2" />
+            v-if="project.href"
+            :href="project.href"
+            target="_blank"
+            rel="noopener"
+          >
+            <span class="absolute inset-0" />
+            {{ project.title }}
           </a>
+          <template v-else>{{ project.title }}</template>
+        </h3>
+
+        <p class="mt-3 flex-1 text-sm leading-relaxed text-faded">
+          {{ project.description }}
+        </p>
+
+        <div class="mt-5 flex flex-wrap gap-1.5">
+          <span v-for="tech in project.stack" :key="tech" class="chip">
+            {{ tech }}
+          </span>
         </div>
       </article>
     </div>

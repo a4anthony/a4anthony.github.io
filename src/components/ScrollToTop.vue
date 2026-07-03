@@ -32,10 +32,11 @@ onMounted(() => {
   <button
     id="scroll-to-top"
     @click="scrollToTop"
+    aria-label="Back to top"
     style="text-orientation: sideways; writing-mode: vertical-rl"
-    class="fixed btn-hidden text-gray-100 bg-sky-400 tracking-widest py-1 bottom-10 right-4 sm:right-8 uppercase text-sm transform rotate-90--"
+    class="fixed btn-hidden z-40 border border-hairline bg-panel font-mono text-xs uppercase tracking-[0.25em] text-faded hover:text-amber hover:border-amber/60 px-1.5 py-3 bottom-10 right-4 sm:right-8"
   >
-    Back to top
+    ↑ top
   </button>
 </template>
 

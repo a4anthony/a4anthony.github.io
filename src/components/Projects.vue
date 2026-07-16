@@ -32,6 +32,15 @@ const projects = ref([
     stack: ["Laravel 12", "Inertia", "Vue 3", "Filament", "Meilisearch"],
   },
   {
+    id: 11,
+    title: "Linkwire",
+    href: "https://links.a4anthony.com",
+    status: "live",
+    description:
+      "Multi-tenant URL shortener and click-analytics service in Go — Redis-first redirect path, non-blocking analytics pipeline, per-tenant rate limiting, and signed webhooks. Portfolio/demo project.",
+    stack: ["Go", "Gin", "PostgreSQL", "Redis", "React", "Prometheus", "Docker"],
+  },
+  {
     id: 10,
     title: "Proctoring Platform",
     href: "",
@@ -98,7 +107,7 @@ const projects = ref([
 </script>
 
 <template>
-  <container title="Projects" eyebrow="/// service registry — 10 entries">
+  <container title="Projects" eyebrow="/// service registry — 11 entries">
     <div class="grid grid-cols-1 gap-px border border-hairline bg-ground md:grid-cols-2 lg:grid-cols-3">
       <article
         v-for="project in projects"

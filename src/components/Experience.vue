@@ -4,6 +4,18 @@ import Container from "./Container.vue";
 
 const entries = ref([
   {
+    id: 0,
+    period: "2026.08 — now",
+    title: "Founder & Engineer",
+    org: "Seamward · seamward.com",
+    notes: [
+      "Building an integration reliability control plane: it observes a customer's third-party API and webhook integrations from the side, detects contract and behavioural drift, and replays redacted traffic in a network-denied sandbox to validate repairs before a human ships them.",
+      "TypeScript monorepo end to end — Fastify 5 API, Next.js 15 console, Prisma on PostgreSQL, graphile-worker for transactional ingest-and-enqueue, a pure-function drift engine, and OS-level replay sandboxing.",
+      "Bounded AI subsystem: provider-agnostic LLM repair proposals checked by deterministic validation and human approval, plus a production MCP server behind OAuth 2.0.",
+      "Early-stage MVP: ~74K lines of TypeScript, 600+ Vitest cases, PR-only workflow with gated production deploys.",
+    ],
+  },
+  {
     id: 1,
     period: "2021.10 — now",
     title: "Full-Stack Software Engineer",
@@ -40,14 +52,20 @@ const entries = ref([
 
 <template>
   <container title="Experience" eyebrow="/// changelog" anchor="experience">
-    <ol class="relative border-l border-hairline">
+    <ol v-reveal.bare class="relative">
+      <!-- the spine draws itself as the section comes into view -->
+      <div
+        class="timeline-line absolute bottom-0 left-0 top-0 w-px bg-[rgba(233,228,216,0.14)]"
+        aria-hidden="true"
+      />
       <li
-        v-for="entry in entries"
+        v-for="(entry, index) in entries"
         :key="entry.id"
+        v-reveal="index * 140"
         class="relative pb-14 pl-8 last:pb-0 sm:pl-12"
       >
         <span
-          class="absolute -left-[5px] top-1.5 h-[9px] w-[9px] border border-amber bg-ground"
+          class="dot-pop absolute -left-[5px] top-1.5 h-[9px] w-[9px] border border-amber bg-ground"
           aria-hidden="true"
         />
         <p class="font-mono text-xs uppercase tracking-[0.2em] text-amber">
@@ -59,11 +77,15 @@ const entries = ref([
         <p class="mt-1 font-mono text-sm text-faded">{{ entry.org }}</p>
         <ul class="mt-4 max-w-3xl space-y-2.5">
           <li
-            v-for="(note, index) in entry.notes"
-            :key="index"
-            class="flex text-sm leading-relaxed text-faded"
+            v-for="(note, i) in entry.notes"
+            :key="i"
+            class="chip-in flex text-sm leading-relaxed text-faded"
+            :style="{ '--cd': `${index * 140 + 300 + i * 90}ms` }"
           >
-            <span class="mr-3 mt-[7px] h-px w-4 shrink-0 bg-amber/50" aria-hidden="true" />
+            <span
+              class="mr-3 mt-[7px] h-px w-4 shrink-0 bg-amber/50"
+              aria-hidden="true"
+            />
             <span>{{ note }}</span>
           </li>
         </ul>

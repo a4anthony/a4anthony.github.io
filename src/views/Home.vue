@@ -20,6 +20,22 @@ const backendIndex = ref(0);
 const storeIndex = ref(0);
 let cycleTimer;
 
+// nav: scroll progress + active section
+const progress = ref(0);
+const activeSection = ref("");
+let sectionObserver;
+
+// ambient cursor light
+const glow = ref({ x: -1000, y: -1000 });
+const onPointerMove = (e) => {
+  glow.value = { x: e.clientX, y: e.clientY };
+};
+
+const onScroll = () => {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  progress.value = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+};
+
 onMounted(() => {
   cycleTimer = setInterval(() => {
     frontendIndex.value = (frontendIndex.value + 1) % frontends.length;
@@ -28,10 +44,30 @@ onMounted(() => {
       storeIndex.value = (storeIndex.value + 1) % stores.length;
     }
   }, 3000);
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  if ("IntersectionObserver" in window) {
+    sectionObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) activeSection.value = `#${entry.target.id}`;
+        }
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+    );
+    for (const link of navLinks) {
+      const el = document.querySelector(link.href);
+      if (el) sectionObserver.observe(el);
+    }
+  }
 });
 
 onBeforeUnmount(() => {
   clearInterval(cycleTimer);
+  window.removeEventListener("scroll", onScroll);
+  sectionObserver?.disconnect();
 });
 
 const navLinks = [
@@ -45,14 +81,23 @@ const statusLine = [
   { label: "role", value: "Full-Stack Engineer" },
   { label: "base", value: "Manchester, UK" },
   { label: "current", value: "In Focus Europe" },
+  { label: "building", value: "Seamward" },
   { label: "education", value: "MSc, Distinction" },
 ];
 </script>
 
 <template>
-  <div class="min-h-screen">
+  <div class="relative isolate min-h-screen" @pointermove="onPointerMove">
+    <div
+      v-if="!prefersReducedMotion"
+      class="cursor-glow"
+      :style="{ '--mx': glow.x + 'px', '--my': glow.y + 'px' }"
+      aria-hidden="true"
+    />
+
     <!-- nav -->
     <nav
+      v-reveal
       class="fixed inset-x-0 top-0 z-50 border-b border-hairline bg-ground/85 backdrop-blur"
     >
       <div
@@ -66,9 +111,19 @@ const statusLine = [
             v-for="link in navLinks"
             :key="link.href"
             :href="link.href"
-            class="hidden font-mono text-xs text-faded hover:text-steam sm:block"
+            class="hidden font-mono text-xs transition-colors duration-300 sm:block"
+            :class="
+              activeSection === link.href
+                ? 'text-steam'
+                : 'text-faded hover:text-steam'
+            "
           >
-            {{ link.label }}
+            <span
+              class="mr-1.5 inline-block transition-opacity duration-300"
+              :class="activeSection === link.href ? 'opacity-100 text-amber' : 'opacity-0'"
+              aria-hidden="true"
+              >/</span
+            >{{ link.label }}
           </a>
           <a
             href="https://blog.a4anthony.com/"
@@ -80,33 +135,49 @@ const statusLine = [
           </a>
         </div>
       </div>
+      <!-- scroll progress -->
+      <div
+        class="absolute inset-x-0 bottom-0 h-px w-full origin-left bg-amber"
+        :style="{ transform: `scaleX(${progress})` }"
+        aria-hidden="true"
+      />
     </nav>
 
     <!-- hero -->
     <header id="top" class="mx-auto max-w-6xl px-6 pb-16 pt-36 sm:pt-44">
-      <p class="eyebrow rise rise-1 mb-6">
+      <p v-reveal.wipe="120" class="eyebrow mb-6">
         Manchester, UK — Full-Stack Software Engineer
       </p>
       <h1
-        class="rise rise-2 font-display text-5xl font-bold tracking-tight text-steam sm:text-7xl lg:text-8xl"
+        v-reveal.wipe="280"
+        class="font-display text-5xl font-bold tracking-tight text-steam sm:text-7xl lg:text-8xl"
       >
         Anthony Akro<span class="text-amber">.</span>
       </h1>
-      <p class="rise rise-3 mt-8 max-w-2xl text-lg leading-relaxed text-faded">
+      <p
+        v-reveal="520"
+        class="mt-8 max-w-2xl text-lg leading-relaxed text-faded"
+      >
         I build web applications and keep them running in production: the
         interface, the API behind it, and the infrastructure underneath. Seven
         years across the PHP and TypeScript ecosystems — Laravel and Vue at the
-        core; NestJS, Go, and Python where the job calls for them. Lately: a
-        production AI agent that ships real fixes, and an MSc in Computer
+        core; NestJS, Go, and Python where the job calls for them. Lately:
+        founding Seamward, an integration-reliability control plane, alongside
+        a production AI agent that ships real fixes, and an MSc in Computer
         Science with research in federated machine learning and explainable
         AI.
       </p>
 
-      <!-- status line -->
+      <!-- status line: values resolve one after another, like a readout -->
       <dl
-        class="rise rise-4 mt-10 flex flex-wrap gap-x-10 gap-y-4 border-y border-hairline py-4"
+        v-reveal="700"
+        class="mt-10 flex flex-wrap gap-x-10 gap-y-4 border-y border-hairline py-4"
       >
-        <div v-for="item in statusLine" :key="item.label">
+        <div
+          v-for="(item, i) in statusLine"
+          :key="item.label"
+          v-reveal.wipe="900 + i * 110"
+        >
           <dt class="font-mono text-[11px] uppercase tracking-[0.25em] text-faded">
             {{ item.label }}
           </dt>
@@ -114,7 +185,7 @@ const statusLine = [
         </div>
       </dl>
 
-      <div class="rise rise-5 mt-10 flex flex-wrap items-center gap-4">
+      <div v-reveal="1250" class="mt-10 flex flex-wrap items-center gap-4">
         <a href="#contact" class="btn">Get in touch</a>
         <a
           href="https://blog.a4anthony.com/"
@@ -144,7 +215,7 @@ const statusLine = [
       </div>
 
       <!-- signature: the full loop — runtime lane + delivery lane -->
-      <figure class="rise rise-6 mt-20">
+      <figure v-reveal="1450" class="mt-20">
         <div class="overflow-x-auto">
           <svg
             viewBox="0 0 780 270"
@@ -249,7 +320,27 @@ const statusLine = [
               </text>
               <text x="557" y="40.5">{{ stores[storeIndex] }}</text>
               <text x="557" y="128.5">redis</text>
-              <text x="723" y="84.5" fill="#5BC98C">200 OK</text>
+              <!-- 200 OK blinks as each packet lands -->
+              <text x="723" y="84.5" fill="#5BC98C">
+                200 OK
+                <template v-if="!prefersReducedMotion">
+                  <animate
+                    attributeName="opacity"
+                    values="1;1;0.3;1"
+                    keyTimes="0;0.96;0.975;1"
+                    dur="4.5s"
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="opacity"
+                    values="1;1;0.3;1"
+                    keyTimes="0;0.96;0.975;1"
+                    dur="4.5s"
+                    begin="2.25s"
+                    repeatCount="indefinite"
+                  />
+                </template>
+              </text>
               <!-- delivery lane -->
               <text x="59" y="244.5">git push</text>
               <text x="225" y="244.5">ci · tests</text>
@@ -283,6 +374,7 @@ const statusLine = [
     <!-- footer -->
     <footer class="border-t border-hairline">
       <div
+        v-reveal
         class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-8"
       >
         <span class="font-mono text-xs text-faded"

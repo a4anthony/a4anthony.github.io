@@ -1,9 +1,37 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/vue/24/outline/index.js";
 import Container from "./Container.vue";
 
+const statuses = {
+  live: { label: "live", text: "text-live", dot: "dot-live" },
+  early: { label: "early access", text: "text-amber", dot: "dot-early" },
+  oss: {
+    label: "open source",
+    text: "text-amber",
+    dot: "border border-amber bg-transparent",
+  },
+  dev: { label: "in development", text: "text-faded", dot: "bg-faded" },
+};
+
 const projects = ref([
+  {
+    id: 12,
+    title: "Seamward",
+    href: "https://seamward.com",
+    status: "early",
+    description:
+      "Integration reliability control plane: observes third-party API and webhook traffic from the side, detects contract drift, replays redacted traffic in a network-denied sandbox, and validates repairs before a human ships them. Founder venture.",
+    stack: [
+      "TypeScript",
+      "Fastify",
+      "Next.js 15",
+      "Prisma",
+      "PostgreSQL",
+      "MCP",
+      "Turborepo",
+    ],
+  },
   {
     id: 1,
     title: "Hired By Code",
@@ -39,6 +67,24 @@ const projects = ref([
     description:
       "Multi-tenant URL shortener and click-analytics service in Go — Redis-first redirect path, non-blocking analytics pipeline, per-tenant rate limiting, and signed webhooks. Portfolio/demo project.",
     stack: ["Go", "Gin", "PostgreSQL", "Redis", "React", "Prometheus", "Docker"],
+  },
+  {
+    id: 14,
+    title: "Go Webhook Hub",
+    href: "https://github.com/a4anthony/go-webhook-hub",
+    status: "oss",
+    description:
+      "High-concurrency webhook ingestion and delivery — HMAC verification, JetStream at-least-once processing, backoff with jitter, per-destination circuit breakers, dead-letter replay. Chaos-tested.",
+    stack: ["Go", "Gin", "NATS JetStream", "PostgreSQL", "Prometheus", "Docker"],
+  },
+  {
+    id: 13,
+    title: "Agent Platform",
+    href: "https://github.com/a4anthony/agent-platform",
+    status: "oss",
+    description:
+      "Self-hostable LLM agent operations platform — budgeted tool execution, SSE streaming, pgvector semantic memory, versioned prompts, human approvals, and YAML evaluation suites.",
+    stack: ["Python", "FastAPI", "PostgreSQL", "pgvector", "React", "Prometheus"],
   },
   {
     id: 10,
@@ -104,44 +150,37 @@ const projects = ref([
     stack: ["PHP 8+", "Laravel", "PHPUnit"],
   },
 ]);
+
+const eyebrow = computed(
+  () => `/// service registry — ${projects.value.length} entries`
+);
 </script>
 
 <template>
-  <container title="Projects" eyebrow="/// service registry — 11 entries">
-    <div class="grid grid-cols-1 gap-px border border-hairline bg-ground md:grid-cols-2 lg:grid-cols-3">
+  <container title="Projects" :eyebrow="eyebrow">
+    <div
+      class="grid grid-cols-1 gap-px border border-hairline bg-ground md:grid-cols-2 lg:grid-cols-3"
+    >
       <article
-        v-for="project in projects"
+        v-for="(project, index) in projects"
         :key="project.id"
-        class="group relative flex flex-col bg-panel p-6 transition-colors duration-300 hover:bg-panel/60"
+        v-reveal="(index % 3) * 90"
+        class="group relative flex flex-col bg-panel p-6 transition-colors duration-300 hover:bg-panel/60 before:absolute before:inset-x-0 before:top-0 before:h-px before:origin-left before:scale-x-0 before:bg-amber before:transition-transform before:duration-500 before:ease-out before:content-[''] hover:before:scale-x-100"
       >
         <div class="flex items-center justify-between">
           <span
             class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em]"
-            :class="{
-              'text-live': project.status === 'live',
-              'text-amber': project.status === 'oss',
-              'text-faded': project.status === 'dev',
-            }"
+            :class="statuses[project.status].text"
           >
             <span
-              class="h-1.5 w-1.5 rounded-full"
-              :class="{
-                'dot-live': project.status === 'live',
-                'border border-amber bg-transparent': project.status === 'oss',
-                'bg-faded': project.status === 'dev',
-              }"
+              class="dot-pop h-1.5 w-1.5 rounded-full"
+              :class="statuses[project.status].dot"
             />
-            {{
-              project.status === "live"
-                ? "live"
-                : project.status === "oss"
-                ? "open source"
-                : "in development"
-            }}
+            {{ statuses[project.status].label }}
           </span>
           <arrow-top-right-on-square-icon
             v-if="project.href"
-            class="h-4 w-4 text-faded transition-colors group-hover:text-amber"
+            class="h-4 w-4 text-faded transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-amber"
           />
         </div>
 
@@ -163,7 +202,12 @@ const projects = ref([
         </p>
 
         <div class="mt-5 flex flex-wrap gap-1.5">
-          <span v-for="tech in project.stack" :key="tech" class="chip">
+          <span
+            v-for="(tech, i) in project.stack"
+            :key="tech"
+            class="chip chip-in"
+            :style="{ '--cd': `${(index % 3) * 90 + 250 + i * 40}ms` }"
+          >
             {{ tech }}
           </span>
         </div>

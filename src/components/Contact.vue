@@ -53,7 +53,7 @@ const sendEmail = (e) => {
 
 <template>
   <container title="Contact" eyebrow="/// open a channel">
-    <div class="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.2fr]">
+    <div v-reveal class="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.2fr]">
       <div>
         <p class="max-w-md text-base leading-relaxed text-faded">
           Have a role, a project, or a question about something I've built?

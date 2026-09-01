@@ -21,8 +21,9 @@ defineProps({
     class="max-w-6xl px-6 mx-auto py-24 sm:py-28"
   >
     <div class="mb-12 sm:mb-16">
-      <span v-if="eyebrow" class="eyebrow mb-4">{{ eyebrow }}</span>
+      <span v-if="eyebrow" v-reveal.wipe class="eyebrow mb-4">{{ eyebrow }}</span>
       <h2
+        v-reveal.wipe="140"
         class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-steam"
       >
         {{ title }}

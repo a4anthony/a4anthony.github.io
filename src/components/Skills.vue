@@ -19,7 +19,10 @@ const groups = ref([
       "Inertia.js",
       "Nuxt.js",
       "React",
+      "Next.js",
       "Node.js",
+      "Fastify",
+      "NestJS",
       "Tailwind CSS",
       "Filament",
       "Docker",
@@ -31,12 +34,13 @@ const groups = ref([
   },
   {
     label: "testing",
-    items: ["Pest", "PHPUnit", "Cypress", "Jest", "Laravel Dusk", "Playwright"],
+    items: ["Pest", "PHPUnit", "Cypress", "Jest", "Vitest", "Laravel Dusk", "Playwright"],
   },
   {
     label: "ai & machine learning",
     items: [
       "LLM Agents",
+      "MCP",
       "XGBoost",
       "SHAP",
       "Federated Learning",
@@ -51,8 +55,9 @@ const groups = ref([
   <container title="Stack" eyebrow="/// manifest" anchor="skills">
     <div class="divide-y divide-[rgba(233,228,216,0.14)] border-y border-hairline">
       <div
-        v-for="group in groups"
+        v-for="(group, gi) in groups"
         :key="group.label"
+        v-reveal="gi * 80"
         class="grid grid-cols-1 gap-4 py-6 sm:grid-cols-[220px_1fr] sm:gap-8"
       >
         <span
@@ -61,7 +66,12 @@ const groups = ref([
           {{ group.label }}
         </span>
         <div class="flex flex-wrap gap-1.5">
-          <span v-for="(item, index) in group.items" :key="index" class="chip">
+          <span
+            v-for="(item, i) in group.items"
+            :key="item"
+            class="chip chip-in"
+            :style="{ '--cd': `${gi * 80 + 150 + i * 30}ms` }"
+          >
             {{ item }}
           </span>
         </div>

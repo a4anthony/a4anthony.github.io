@@ -64,7 +64,7 @@ body {
   }
 
   .chip {
-    @apply inline-flex items-center border border-hairline bg-ground/60 px-2.5 py-1 font-mono text-xs text-faded;
+    @apply inline-flex items-center border border-hairline bg-ground/60 px-2.5 py-1 font-mono text-xs text-faded transition-colors duration-300 hover:border-amber/60 hover:text-steam;
   }
 }
 
@@ -80,51 +80,114 @@ body {
   box-shadow: 0 0 0 0 rgba(227, 168, 87, 0.55);
 }
 
-/* hero load sequence */
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+/* ------------------------------------------------------------------ */
+/* reveal system — driven by the v-reveal directive                    */
+/* elements enter once, like systems coming online                     */
+/* ------------------------------------------------------------------ */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms);
 }
-.rise {
-  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-.rise-1 {
-  animation-delay: 0.05s;
-}
-.rise-2 {
-  animation-delay: 0.15s;
-}
-.rise-3 {
-  animation-delay: 0.25s;
-}
-.rise-4 {
-  animation-delay: 0.35s;
-}
-.rise-5 {
-  animation-delay: 0.45s;
-}
-.rise-6 {
-  animation-delay: 0.6s;
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
-/* live status dot */
+/* wipe variant: a monitor powering on, left to right.
+   Uses a mask rather than clip-path: IntersectionObserver treats a
+   fully clip-path'd element as never intersecting, so it would never
+   reveal. A mask is a paint effect and leaves the geometry alone. */
+.reveal.reveal-wipe {
+  opacity: 1;
+  transform: none;
+  -webkit-mask-image: linear-gradient(#000, #000);
+  mask-image: linear-gradient(#000, #000);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 0% 100%;
+  mask-size: 0% 100%;
+  transition: -webkit-mask-size 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
+    mask-size 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms);
+}
+.reveal.reveal-wipe.is-visible {
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+/* children that come online a beat after their parent */
+.reveal .dot-pop,
+.reveal-bare .dot-pop {
+  transform: scale(0);
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)
+    calc(var(--d, 0ms) + 350ms);
+}
+.reveal.is-visible .dot-pop,
+.reveal-bare.is-visible .dot-pop {
+  transform: scale(1);
+}
+
+.reveal .chip-in,
+.reveal-bare .chip-in {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.45s ease var(--cd, 0ms),
+    transform 0.45s ease var(--cd, 0ms),
+    border-color 0.3s ease, color 0.3s ease;
+}
+.reveal.is-visible .chip-in,
+.reveal-bare.is-visible .chip-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* the changelog draws its own spine */
+.reveal-bare .timeline-line {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal-bare.is-visible .timeline-line {
+  transform: scaleY(1);
+}
+
+/* ambient: a faint light follows the cursor across the dot grid */
+.cursor-glow {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    520px circle at var(--mx, -1000px) var(--my, -1000px),
+    rgba(227, 168, 87, 0.085),
+    transparent 62%
+  );
+}
+@media (hover: none) {
+  .cursor-glow {
+    display: none;
+  }
+}
+
+/* status dots */
 @keyframes pulse-dot {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(91, 201, 140, 0.35);
+    box-shadow: 0 0 0 0 var(--pulse, rgba(91, 201, 140, 0.35));
   }
   50% {
-    box-shadow: 0 0 0 4px rgba(91, 201, 140, 0);
+    box-shadow: 0 0 0 4px transparent;
   }
 }
 .dot-live {
   background: #5bc98c;
+  --pulse: rgba(91, 201, 140, 0.35);
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+.dot-early {
+  background: #e3a857;
+  --pulse: rgba(227, 168, 87, 0.4);
   animation: pulse-dot 2.4s ease-in-out infinite;
 }
 
@@ -132,14 +195,28 @@ body {
   html {
     scroll-behavior: auto;
   }
-  .rise {
-    animation: none;
+  .reveal,
+  .reveal.reveal-wipe,
+  .reveal .dot-pop,
+  .reveal-bare .dot-pop,
+  .reveal .chip-in,
+  .reveal-bare .chip-in,
+  .reveal-bare .timeline-line {
+    opacity: 1;
+    transform: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+    transition: none;
   }
-  .dot-live {
+  .dot-live,
+  .dot-early {
     animation: none;
   }
   .custom-hover:hover {
     transform: none;
+  }
+  .cursor-glow {
+    display: none;
   }
 }
 

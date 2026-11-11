@@ -256,10 +256,16 @@ body {
   transform-origin: left;
   animation: intro-bar 1.4s cubic-bezier(0.6, 0, 0.2, 1) backwards 0.2s;
 }
+/* The name wipes in from the left. It uses clip-path, not letter-spacing,
+   so the hidden text never changes the layout around it. */
 @keyframes intro-name {
   from {
-    opacity: 0;
-    letter-spacing: 0.4em;
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(-10px);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: none;
   }
 }
 .intro-name {

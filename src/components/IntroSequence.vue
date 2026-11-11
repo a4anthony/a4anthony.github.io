@@ -38,7 +38,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="intro fixed inset-0 z-[100] grid place-items-center bg-ground px-6"
+    class="intro fixed inset-0 z-[100] grid grid-cols-1 place-items-center overflow-hidden bg-ground px-6"
     :class="{ leaving }"
     role="status"
     aria-label="Compiling scout report"
@@ -49,16 +49,17 @@ onBeforeUnmount(() => {
       <line x1="0" y1="50%" x2="100%" y2="50%" stroke="#F1EEFC" stroke-width="2" />
     </svg>
 
-    <div class="relative w-full max-w-[540px]">
+    <!-- min-w-0 and overflow-hidden: nothing inside may ever widen the panel past the screen -->
+    <div class="relative w-full min-w-0 max-w-[540px] overflow-hidden">
       <p class="label !text-elite">Scouting report</p>
       <dl class="mt-4 space-y-1">
         <div
           v-for="(line, i) in lines"
           :key="line[0]"
-          class="intro-line flex justify-between gap-6 border-b border-line py-1 font-display text-lg uppercase tracking-[0.1em]"
+          class="intro-line flex justify-between gap-4 border-b border-line py-1 font-display text-[15px] uppercase tracking-[0.06em] sm:gap-6 sm:text-lg sm:tracking-[0.1em]"
           :style="{ animationDelay: i * 220 + 'ms' }"
         >
-          <dt class="text-mist">{{ line[0] }}</dt>
+          <dt class="shrink-0 text-mist">{{ line[0] }}</dt>
           <dd class="text-right">{{ line[1] }}</dd>
         </div>
       </dl>
@@ -71,8 +72,9 @@ onBeforeUnmount(() => {
         <span><count-up :to="100" :from="0" :duration="1400" :delay="200" />%</span>
       </p>
 
+      <!-- sized to the screen so the name always fits on one line -->
       <p
-        class="intro-name mt-8 font-display text-6xl font-bold uppercase leading-none sm:text-7xl"
+        class="intro-name mt-8 whitespace-nowrap font-display text-[clamp(2.25rem,13vw,4.5rem)] font-bold uppercase leading-none"
       >
         Anthony Akro
       </p>

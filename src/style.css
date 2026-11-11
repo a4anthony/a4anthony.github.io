@@ -1,243 +1,357 @@
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --doc-height: 100%;
-}
 
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  @apply bg-ground text-steam font-sans antialiased;
-  background-image: radial-gradient(
-    rgba(233, 228, 216, 0.05) 1px,
-    transparent 1px
-  );
-  background-size: 28px 28px;
+  @apply bg-ground font-sans text-chalk antialiased;
 }
 
 ::selection {
-  background: #e3a857;
-  color: #101a1e;
+  background: #7cf29a;
+  color: #0f2417;
 }
 
 :focus-visible {
-  outline: 2px solid #e3a857;
+  outline: 2px solid #7cf29a;
   outline-offset: 2px;
 }
 
 @layer components {
-  .animate {
-    @apply transition-all duration-300 ease-out;
+  .card {
+    @apply min-w-0 rounded border border-line bg-panel p-4;
   }
-  button {
-    @apply animate;
+  .label {
+    @apply font-display text-[13px] font-semibold uppercase tracking-[0.14em] text-mist;
   }
-
-  .h-align {
-    @apply transform -translate-x-1/2 left-1/2;
+  .card-title {
+    @apply mb-3 font-display text-[15px] font-semibold uppercase tracking-[0.12em] text-chalk;
   }
-  .v-align {
-    @apply transform -translate-y-1/2 top-1/2;
-  }
-
-  .form-input {
-    @apply block w-full rounded-none border border-hairline bg-panel py-3 px-3 text-steam shadow-none ring-0 placeholder:text-faded/70 focus:border-amber focus:ring-1 focus:ring-inset focus:ring-amber sm:text-sm sm:leading-6;
-  }
-  .form-label {
-    @apply block font-mono text-xs uppercase tracking-[0.2em] text-faded;
-  }
-
   .btn {
-    @apply inline-flex items-center bg-amber px-5 py-2.5 font-mono text-sm font-semibold uppercase tracking-wider text-ground custom-hover;
+    @apply inline-flex items-center justify-center gap-2 rounded-sm bg-elite px-5 py-2 font-display text-base font-bold uppercase tracking-[0.08em] text-[#0f2417] transition hover:brightness-110 active:translate-y-px disabled:opacity-60;
   }
   .btn-ghost {
-    @apply inline-flex items-center border border-hairline px-5 py-2.5 font-mono text-sm font-semibold uppercase tracking-wider text-steam custom-hover hover:border-amber/60;
+    @apply inline-flex items-center justify-center gap-2 rounded-sm border border-line px-4 py-2 font-display text-base font-semibold uppercase tracking-[0.08em] text-chalk transition hover:border-elite hover:text-elite;
   }
-
-  .eyebrow {
-    @apply block font-mono text-xs uppercase tracking-[0.3em] text-amber;
-  }
-
   .chip {
-    @apply inline-flex items-center border border-hairline bg-ground/60 px-2.5 py-1 font-mono text-xs text-faded transition-colors duration-300 hover:border-amber/60 hover:text-steam;
+    @apply inline-flex items-center rounded-sm border border-line bg-ground/50 px-2 py-0.5 text-xs text-mist;
+  }
+  .field {
+    @apply block w-full rounded-sm border border-line bg-ground px-3 py-2.5 text-chalk placeholder:text-mist/60 focus:border-elite focus:ring-1 focus:ring-elite;
   }
 }
 
-.custom-hover {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.cv-section {
+  @apply mt-10 border-t border-line pt-5;
 }
-.custom-hover:hover {
-  transform: translateY(-3px) translateX(-3px);
-  box-shadow: 4px 4px 0 0 rgba(227, 168, 87, 0.55);
-}
-.custom-hover:active {
-  transform: translateY(1px) translateX(1px);
-  box-shadow: 0 0 0 0 rgba(227, 168, 87, 0.55);
+.cv-heading {
+  @apply mb-4 font-display text-lg font-semibold uppercase tracking-[0.14em] text-elite;
 }
 
-/* ------------------------------------------------------------------ */
-/* reveal system — driven by the v-reveal directive                    */
-/* elements enter once, like systems coming online                     */
-/* ------------------------------------------------------------------ */
-.reveal {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
-    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms);
-}
-.reveal.is-visible {
-  opacity: 1;
-  transform: none;
-}
-
-/* wipe variant: a monitor powering on, left to right.
-   Uses a mask rather than clip-path: IntersectionObserver treats a
-   fully clip-path'd element as never intersecting, so it would never
-   reveal. A mask is a paint effect and leaves the geometry alone. */
-.reveal.reveal-wipe {
-  opacity: 1;
-  transform: none;
-  -webkit-mask-image: linear-gradient(#000, #000);
-  mask-image: linear-gradient(#000, #000);
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: 0% 100%;
-  mask-size: 0% 100%;
-  transition: -webkit-mask-size 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms),
-    mask-size 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms);
-}
-.reveal.reveal-wipe.is-visible {
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-}
-
-/* children that come online a beat after their parent */
-.reveal .dot-pop,
-.reveal-bare .dot-pop {
-  transform: scale(0);
-  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)
-    calc(var(--d, 0ms) + 350ms);
-}
-.reveal.is-visible .dot-pop,
-.reveal-bare.is-visible .dot-pop {
-  transform: scale(1);
-}
-
-.reveal .chip-in,
-.reveal-bare .chip-in {
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.45s ease var(--cd, 0ms),
-    transform 0.45s ease var(--cd, 0ms),
-    border-color 0.3s ease, color 0.3s ease;
-}
-.reveal.is-visible .chip-in,
-.reveal-bare.is-visible .chip-in {
-  opacity: 1;
-  transform: none;
-}
-
-/* the changelog draws its own spine */
-.reveal-bare .timeline-line {
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 1.6s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.reveal-bare.is-visible .timeline-line {
-  transform: scaleY(1);
-}
-
-/* ambient: a faint light follows the cursor across the dot grid */
-.cursor-glow {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(
-    520px circle at var(--mx, -1000px) var(--my, -1000px),
-    rgba(227, 168, 87, 0.085),
-    transparent 62%
-  );
-}
-@media (hover: none) {
-  .cursor-glow {
-    display: none;
+/* the plain CV prints as a normal black-on-white document */
+@media print {
+  body {
+    background: #fff !important;
+  }
+  header.sticky,
+  footer,
+  .no-print,
+  .intro {
+    display: none !important;
+  }
+  .cv,
+  .cv * {
+    color: #111 !important;
+    background: transparent !important;
+    border-color: #bbb !important;
+    animation: none !important;
+  }
+  .cv .bg-elite {
+    background: #111 !important;
+  }
+  .cv a {
+    text-decoration: none !important;
+  }
+  .cv-section {
+    break-inside: auto;
+    margin-top: 18px;
+  }
+  .cv h3 {
+    break-after: avoid;
   }
 }
 
-/* status dots */
+/* ---------- motion ---------- */
+
+/* cards arrive in sequence when a screen opens */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+.enter {
+  animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+/* attribute bars sweep in behind each score */
+@keyframes bar-fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+.bar-fill {
+  transform-origin: left;
+  animation: bar-fill 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+@keyframes radar-grow {
+  from {
+    transform: scale(0.04);
+    opacity: 0.3;
+  }
+}
+.radar-shape {
+  transform-origin: 110px 110px;
+  animation: radar-grow 1s cubic-bezier(0.2, 0.8, 0.2, 1) backwards 0.85s;
+}
+
+/* the radar builds itself: rings and spokes draw, a scan sweeps round, then the shape lands */
+@keyframes radar-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+.radar-line {
+  stroke-dasharray: 1;
+  animation: radar-draw 0.7s ease-out backwards;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+@keyframes radar-sweep {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0;
+  }
+  10%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(360deg);
+    opacity: 0;
+  }
+}
+.radar-sweep {
+  opacity: 0;
+  transform-origin: 110px 110px;
+  animation: radar-sweep 1.5s cubic-bezier(0.4, 0, 0.2, 1) 0.35s;
+}
+.radar-vertex {
+  transition: r 0.25s ease;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.18);
+  }
+}
+.pop {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pop 0.5s cubic-bezier(0.3, 1.4, 0.6, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 90ms + 200ms);
+}
+
+@keyframes flip-in {
+  from {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+}
+.flip-in {
+  animation: flip-in 0.45s ease-out backwards;
+  animation-delay: calc(var(--i, 0) * 110ms + 150ms);
+}
+
+@keyframes slide {
+  to {
+    transform: translateX(-100%);
+  }
+}
+.ticker-track {
+  animation: slide 46s linear infinite;
+}
+.ticker:hover .ticker-track {
+  animation-play-state: paused;
+}
+
 @keyframes pulse-dot {
   0%,
   100% {
-    box-shadow: 0 0 0 0 var(--pulse, rgba(91, 201, 140, 0.35));
+    box-shadow: 0 0 0 0 var(--pulse, rgba(124, 242, 154, 0.45));
   }
   50% {
-    box-shadow: 0 0 0 4px transparent;
+    box-shadow: 0 0 0 5px transparent;
   }
 }
-.dot-live {
-  background: #5bc98c;
-  --pulse: rgba(91, 201, 140, 0.35);
-  animation: pulse-dot 2.4s ease-in-out infinite;
+.dot-pulse {
+  animation: pulse-dot 2.2s ease-in-out infinite;
 }
-.dot-early {
-  background: #e3a857;
-  --pulse: rgba(227, 168, 87, 0.4);
-  animation: pulse-dot 2.4s ease-in-out infinite;
+
+/* tactics board: players run from the centre spot to their positions */
+.token {
+  transition: left 0.9s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
+  transition-delay: calc(var(--i, 0) * 55ms);
+}
+.kickoff .token {
+  left: 50% !important;
+  top: 50% !important;
+  opacity: 0;
+  transition: none;
+}
+
+/* screen changes */
+.screen-enter-active,
+.screen-leave-active {
+  transition: opacity 0.18s ease;
+}
+.screen-enter-from,
+.screen-leave-to {
+  opacity: 0;
+}
+
+.swap-enter-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.swap-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+/* intro */
+@keyframes intro-line {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+.intro-line {
+  animation: intro-line 0.4s ease-out backwards;
+}
+@keyframes intro-bar {
+  from {
+    transform: scaleX(0);
+  }
+}
+.intro-bar {
+  transform-origin: left;
+  animation: intro-bar 1.4s cubic-bezier(0.6, 0, 0.2, 1) backwards 0.2s;
+}
+@keyframes intro-name {
+  from {
+    opacity: 0;
+    letter-spacing: 0.4em;
+  }
+}
+.intro-name {
+  animation: intro-name 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) backwards 1.5s;
+}
+.intro {
+  transition: transform 0.6s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.intro.leaving {
+  transform: translateY(-100%);
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .reveal,
-  .reveal.reveal-wipe,
-  .reveal .dot-pop,
-  .reveal-bare .dot-pop,
-  .reveal .chip-in,
-  .reveal-bare .chip-in,
-  .reveal-bare .timeline-line {
-    opacity: 1;
-    transform: none;
-    -webkit-mask-image: none;
-    mask-image: none;
-    transition: none;
-  }
-  .dot-live,
-  .dot-early {
+  .enter,
+  .bar-fill,
+  .radar-shape,
+  .radar-line,
+  .radar-sweep,
+  .pop,
+  .flip-in,
+  .ticker-track,
+  .dot-pulse,
+  .intro-line,
+  .intro-bar,
+  .intro-name {
     animation: none;
   }
-  .custom-hover:hover {
-    transform: none;
-  }
-  .cursor-glow {
-    display: none;
+  .token,
+  .intro {
+    transition: none;
   }
 }
 
-.scroll-to-top--btn {
-  z-index: 100;
-  position: fixed;
-  bottom: 20px;
-  right: 40px;
-  opacity: 0.85;
-  color: #e9e4d8 !important;
-  padding: 20px 10px;
+/* ---------- scrollbars ---------- */
+/* A green thumb on a dark track, turning yellow under the cursor. */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #14112a;
+  border-left: 1px solid rgba(241, 238, 252, 0.08);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #7cf29a, #3fd17a);
+  border: 3px solid #14112a;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, #f4d35e, #f0b93a);
+}
+::-webkit-scrollbar-corner {
+  background: #14112a;
 }
 
-.btn-visible {
-  visibility: visible;
-  opacity: 0.85;
-  transition: opacity 0.2s linear;
+/* scroll areas inside cards get a slimmer bar on the card colour */
+.card ::-webkit-scrollbar-track,
+.card::-webkit-scrollbar-track {
+  background: #1e1a3a;
+  border: 0;
+}
+.card ::-webkit-scrollbar-thumb,
+.card::-webkit-scrollbar-thumb {
+  border: 2px solid #1e1a3a;
+  background: #7cf29a;
 }
 
-.btn-hidden {
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s 0.2s, opacity 0.2s linear;
+/* browsers without the WebKit scrollbar parts (Firefox) */
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-color: #7cf29a #14112a;
+    scrollbar-width: thin;
+  }
+  .card {
+    scrollbar-color: #7cf29a #1e1a3a;
+  }
+}
+
+/* the tab row scrolls sideways on small screens without showing a bar */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* portrait in a circle: zoom in a little, centred on the face */
+.avatar-img {
+  transform: scale(1.2);
+  transform-origin: 50% 42%;
 }

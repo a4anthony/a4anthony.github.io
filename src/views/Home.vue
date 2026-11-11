@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import {
   ArrowPathIcon,
   ArrowTopRightOnSquareIcon,
@@ -34,6 +34,26 @@ const screen = computed(() => screens[tab.value]);
 const crumb = computed(
   () => nav.find((n) => n.id === tab.value)?.label ?? "Plain CV"
 );
+
+// Switching screens: if the tab row is pinned under the top bar, keep it
+// pinned and show the new screen from its first line. If the visitor is
+// still above that point, leave the page exactly where it is.
+const topBar = ref(null);
+const playerHeader = ref(null);
+watch(tab, (now, before) => {
+  if (now === "cv" || before === "cv") {
+    window.scrollTo({ top: 0, behavior: "instant" });
+    return;
+  }
+  if (!topBar.value || !playerHeader.value) return;
+  const pinnedAt =
+    playerHeader.value.getBoundingClientRect().bottom +
+    window.scrollY -
+    topBar.value.offsetHeight;
+  if (window.scrollY > pinnedAt) {
+    window.scrollTo({ top: pinnedAt, behavior: "instant" });
+  }
+});
 
 // intro: once per session, never under reduced motion
 const reduce =
@@ -102,7 +122,7 @@ onBeforeUnmount(() => clearInterval(clock));
     />
 
     <!-- top bar -->
-    <header class="sticky top-0 z-30 border-b border-line bg-panel/95 backdrop-blur">
+    <header ref="topBar" class="sticky top-0 z-30 border-b border-line bg-panel/95 backdrop-blur">
       <div class="flex h-12 items-center justify-between gap-3 px-3 sm:px-4">
         <p class="flex min-w-0 items-center gap-3 text-sm text-mist">
           <a
@@ -168,6 +188,7 @@ onBeforeUnmount(() => clearInterval(clock));
       <template v-if="tab !== 'cv'">
         <!-- player header -->
         <section
+          ref="playerHeader"
           class="relative overflow-hidden rounded-t border border-b-0 border-line bg-panel px-4 py-5 sm:px-6"
         >
           <svg
@@ -260,9 +281,12 @@ onBeforeUnmount(() => clearInterval(clock));
         </nav>
       </template>
 
-      <transition name="screen" mode="out-in">
-        <component :is="screen" v-if="revealed" :key="tab + runKey" />
-      </transition>
+      <!-- tall enough that a short screen can still sit under the pinned tab row -->
+      <div class="min-h-[calc(100svh-140px)]">
+        <transition name="screen" mode="out-in">
+          <component :is="screen" v-if="revealed" :key="tab + runKey" />
+        </transition>
+      </div>
 
       <footer class="mt-8 flex flex-wrap items-center justify-between gap-3 px-1 text-xs text-mist">
         <span>&copy; {{ new Date().getFullYear() }} Anthony Akro. Built with Vue, styled as a scout report.</span>

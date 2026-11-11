@@ -21,14 +21,9 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
   // base: "http://localhost:5174",
-  scrollBehavior(to, from, savedPosition) {
-    let elm;
-    if (to.hash) {
-      elm = document.querySelector(to.hash);
-    }
-
-    // always scroll to top
-    return { top: elm?.offsetTop || 0, behavior: "smooth" };
+  // screens are switched by hash in Home.vue, which also handles scrolling
+  scrollBehavior() {
+    return false;
   },
 });
 

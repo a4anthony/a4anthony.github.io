@@ -23,7 +23,7 @@ const fmt = (n) => n.toLocaleString("en-GB");
       class="enter col-span-12 grid grid-cols-2 gap-px overflow-hidden rounded border border-line bg-line sm:grid-cols-5"
       style="--i: 0"
     >
-      <div v-for="(t, i) in careerTotals" :key="t.label" class="bg-panel p-4">
+      <div v-for="(t, i) in careerTotals" :key="t.label" class="bg-panel p-4 last:col-span-2 sm:last:col-span-1">
         <p class="label">{{ t.label }}</p>
         <p class="mt-1 font-display text-4xl font-bold leading-none text-chalk">
           <span v-if="t.approx" class="text-2xl text-mist">~</span

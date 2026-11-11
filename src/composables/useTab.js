@@ -18,7 +18,6 @@ export function useTab() {
   const go = (name) => {
     if (tab.value === name) return;
     window.location.hash = name;
-    window.scrollTo({ top: 0 });
   };
   return { tab, go };
 }

@@ -1,0 +1,58 @@
+<!doctype html>
+<!--
+  Source for public/og-image.png, the picture shown when a link to the site is shared.
+  Render it at 1200x630 with headless Chrome:
+    chrome --headless=new --hide-scrollbars --force-device-scale-factor=1 \
+      --window-size=1200,630 --virtual-time-budget=8000 \
+      --screenshot=public/og-image.png tools/share-image.html
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Share image</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body { position: relative; background: #14112A; color: #F1EEFC; font-family: "Barlow", Arial, sans-serif; }
+  .pitch { position: absolute; inset: 0; }
+  .who { position: absolute; left: 72px; top: 58px; }
+  .tag, .url { font-family: "Barlow Condensed", Arial, sans-serif; font-weight: 600; font-size: 24px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .tag { color: #7CF29A; }
+  h1 { margin-top: 10px; font-family: "Barlow Condensed", Arial, sans-serif; font-weight: 700; font-size: 80px; line-height: 1; text-transform: uppercase; letter-spacing: 0.01em; }
+  .role { margin-top: 10px; font-size: 26px; color: #A8A2C8; }
+  .url { position: absolute; left: 72px; bottom: 56px; color: #A8A2C8; }
+  #radar { position: absolute; left: 106px; top: 73px; width: 1148px; height: 525px; }
+</style>
+</head>
+<body>
+  <svg class="pitch" viewBox="0 0 1200 630" aria-hidden="true">
+    <g fill="none" stroke="#F1EEFC" stroke-opacity="0.045" stroke-width="3">
+      <circle cx="680" cy="335" r="262" />
+      <line x1="680" y1="0" x2="680" y2="630" />
+    </g>
+  </svg>
+  <div class="who">
+    <p class="tag">Scout report</p>
+    <h1>Anthony A.</h1>
+    <p class="role">Full-stack software engineer</p>
+  </div>
+  <svg id="radar" viewBox="-170 -18 560 256" aria-hidden="true"></svg>
+  <span class="url">a4anthony.com</span>
+<script>
+  const NS = "http://www.w3.org/2000/svg", svg = document.getElementById("radar");
+  const axes = [["Backend", 18], ["Frontend", 17], ["Testing", 16], ["Data", 15], ["DevOps", 15], ["Product", 15], ["AI", 15]];
+  const el = (t, a, x) => { const n = document.createElementNS(NS, t); for (const k in a) n.setAttribute(k, a[k]); if (x != null) n.textContent = x; svg.appendChild(n); return n; };
+  const pt = (i, r) => { const a = (-90 + i * 360 / axes.length) * Math.PI / 180; return [110 + Math.cos(a) * r, 110 + Math.sin(a) * r]; };
+  [5, 10, 15, 20].forEach(v => el("polygon", { points: axes.map((_, i) => pt(i, v * 4.4).join(",")).join(" "), fill: "none", stroke: "rgba(241,238,252,0.16)", "stroke-width": 0.7 }));
+  axes.forEach((a, i) => { const [x, y] = pt(i, 88); el("line", { x1: 110, y1: 110, x2: x, y2: y, stroke: "rgba(241,238,252,0.16)", "stroke-width": 0.7 }); });
+  el("polygon", { points: axes.map((a, i) => pt(i, a[1] * 4.4).join(",")).join(" "), fill: "rgba(124,242,154,0.22)", stroke: "#7CF29A", "stroke-width": 1.6, "stroke-linejoin": "round" });
+  axes.forEach((a, i) => {
+    const [vx, vy] = pt(i, a[1] * 4.4); el("circle", { cx: vx, cy: vy, r: 3, fill: "#7CF29A" });
+    const [lx, ly] = pt(i, 104);
+    const t = el("text", { x: lx, y: ly + 4, "text-anchor": lx < 100 ? "end" : lx > 120 ? "start" : "middle", fill: "#A8A2C8", "font-family": "Barlow Condensed, Arial, sans-serif", "font-size": 12.5, "letter-spacing": 1.2 }, a[0].toUpperCase() + " ");
+    const s = document.createElementNS(NS, "tspan"); s.setAttribute("fill", "#F1EEFC"); s.setAttribute("font-weight", 700); s.textContent = a[1]; t.appendChild(s);
+  });
+</script>
+</body>
+</html>
